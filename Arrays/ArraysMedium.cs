@@ -102,6 +102,62 @@ internal class ArraysMedium
         return maxLength;
     }
 
+    /// <summary>Leaders in an Array - Brute force</summary>
+    /// <remarks>T: O(n²), S: O(n) used to return the answer.</remarks>
+    public List<int> Leaders(List<int> nums) 
+    {
+        int n = nums.Count;
+
+        // S: O(n)
+        List<int> result = new List<int>();
+        
+        // T: O(n²)
+        for (int i = 0; i < n; i++)
+        {
+            bool isLeader = true;
+
+            for (int j = i; j < n; j++)
+            {
+                if (nums[j] > nums[i]) 
+                {
+                    isLeader = false;
+                    break;
+                }
+            }
+
+            if (isLeader) result.Add(nums[i]);
+        }
+
+        return result;
+    }
+
+    /// <summary>Leaders in an Array - Optimal</summary>
+    /// <remarks>T: O(2n), S: O(n) used to return the answer.</remarks>
+    public List<int> Leaders_Optimal(List<int> nums) 
+    {
+        int n = nums.Count;
+
+        // S: O(n)
+        List<int> result = new List<int>();
+        
+        int maxValue = int.MinValue;
+
+        // T: O(n)
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (nums[i] > maxValue)
+            {
+                result.Add(nums[i]); 
+                maxValue = nums[i];
+            }
+        }
+
+        // T: O(n / 2)
+        result.Reverse();
+
+        return result;
+    }
+
     internal static void Swap(ref int a, ref int b)
     {
         int temp = a;
