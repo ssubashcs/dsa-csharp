@@ -158,6 +158,105 @@ internal class ArraysMedium
         return result;
     }
 
+    /// <summary>Optimal | T: O(2mn), S: O(1) - In-place marker approach</summary>
+    // [[1, 1, 1], [0, 1, 1], [1, 0, 1]]
+    public void SetMatrixZeroes(int[][] matrix) 
+    {
+        int rows = matrix.Length, cols = matrix[0].Length;
+
+        // bool[] isRowZero = new bool[rows]; -> matrix[..][0] first column
+        // bool[] isColZero = new bool[cols]; -> matrix[0][..] first row
+
+        int colZero = 1;
+
+        // Step 1: mark in the first row and first columns that need to be zeroed
+        // T: O(m x n)
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    matrix[i][0] = 0;
+                    
+                    if (j == 0)
+                        colZero = 0;
+                    else
+                        matrix[0][j] = 0;
+                }
+            }
+        }
+
+        // Step 2: update the remaining portion based on the markers - O(m x n) appx.
+        for (int i = 1; i < rows; i++)
+        {
+            for (int j = 1; j < cols; j++)
+            {
+                if (matrix[i][j] != 0)
+                {
+                    if (matrix[0][j] == 0 || matrix[i][0] == 0)
+                    {
+                        matrix[i][j] = 0;
+                    }
+                }
+            }
+        }
+ 
+        // Step 3: update the first row - O(n)
+        if (matrix[0][0] == 0)
+        {
+            for (int i = 1; i < cols; i++)
+            {
+                matrix[0][i] = 0;
+            }
+        }
+
+        // Step 4: update the first column - O(m)
+        if (colZero == 0)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                matrix[j][0] = 0;
+            }
+        }
+    }
+
+    /// <summary>Brute Force | Time and Space: O(n²)</summary>
+    // [[1,2,3],[4,5,6],[7,8,9]]
+    private void RotateImage(int[][] matrix)
+    {
+        int n = matrix.Length;
+
+        // S: O(n x n)
+        int[][] jaggedArray = new int[n][];
+
+        // O(n)
+        for (int i = 0; i < n; i++)
+        {
+            jaggedArray[i] = new int[n];
+        }
+
+        // O(n x n)
+        for (int i = 0; i < n; i++)
+        {
+            int col = n - 1 - i;
+
+            for (int j = 0; j < n; j++)
+            {
+                jaggedArray[j][col] = matrix[i][j];
+            }
+        }
+
+        // O(n x n)
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                matrix[i][j] = jaggedArray[i][j];
+            }
+        }
+    }
+
     internal static void Swap(ref int a, ref int b)
     {
         int temp = a;
