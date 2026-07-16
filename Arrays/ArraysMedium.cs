@@ -257,6 +257,98 @@ internal class ArraysMedium
         }
     }
 
+    /// <summary>Optimal solution | T: O(2n²), S: O(1)</summary>
+    public void Rotate(int[][] matrix) 
+    {
+        int n = matrix.Length;
+ 
+        // transpose the matrix - O(n²)
+        for (int i = 0; i < n - 1; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                (matrix[i][j], matrix[j][i]) = (matrix[j][i], matrix[i][j]);
+            }
+        }
+
+        // reverse the rows - O(n * n / 2) 
+        foreach (int[] row in matrix)
+        {
+            Reverse(row);
+        }
+
+        // O(n / 2)
+        void Reverse(int[] array)
+        {
+            int i = 0, j = array.Length - 1;
+
+            while (i < j)
+            {
+                (array[i], array[j]) = (array[j], array[i]);
+                i++; j--;
+            }
+        }
+    }
+
+    /// <summary>The standard optimal solution | Time and Space: O(m x n) | 16th July</summary>
+    public IList<int> SpiralMatrix(int[][] matrix) 
+    {
+        int rows = matrix.Length;  // m
+        int cols = matrix[0].Length;  // n
+
+        // S: O(m x n) for the output list
+        List<int> list = new(rows * cols);
+
+        int top = 0, left = 0; // row, col
+        int right = cols - 1, bottom = rows - 1;  // col, row
+
+        // T: O(m x n) - every element is visited once
+        while (left <= right && top <= bottom)
+        {
+            // Traverse left to right across the top row
+            for (int i = left; i <= right; i++)
+            {
+                list.Add(matrix[top][i]);
+            }
+
+            top++;
+
+            // Traverse top to bottom along the right column
+            for (int j = top; j <= bottom; j++)
+            {
+                list.Add(matrix[j][right]);
+            }
+
+            right--;
+
+            // Check if any row still remains
+            if (top <= bottom)
+            {
+                // Traverse right to left across the bottom row
+                for (int k = right; k >= left; k--)
+                {
+                    list.Add(matrix[bottom][k]);
+                }
+
+                bottom--;
+            }
+
+            // Check if any column still remains
+            if (left <= right)
+            {
+                // Traverse bottom to top along the left column
+                for (int l = bottom; l >= top; l--)
+                {
+                    list.Add(matrix[l][left]);
+                }
+
+                left++;
+            }
+        }
+
+        return list;
+    }
+
     internal static void Swap(ref int a, ref int b)
     {
         int temp = a;
