@@ -303,6 +303,7 @@ internal class ArraysMedium
         int right = cols - 1, bottom = rows - 1;  // col, row
 
         // T: O(m x n) - every element is visited once
+        // the equality case ensures the remaining single row, column or even a single cell is processed
         while (left <= right && top <= bottom)
         {
             // Traverse left to right across the top row

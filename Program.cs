@@ -2,6 +2,6 @@
 {
     static void Main()
     {
-        new ArraysMedium().Run();
+        new ArraysHard().Run();
     }
 }
